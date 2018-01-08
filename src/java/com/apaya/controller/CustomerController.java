@@ -8,6 +8,7 @@ package com.apaya.controller;
 import com.apaya.bean.CustomerBean;
 import com.apaya.dao.CustomerDao;
 import com.apaya.entity.Customer;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,11 +30,14 @@ public class CustomerController {
     public String addCustomer(Model model) {
         CustomerBean customerBean = new CustomerBean();
         model.addAttribute("customerBean", customerBean);
-        return "";
+        List<Customer> custs =  cd.showAllCustomer();
+        model.addAttribute("custs", custs);
+        return "customerAdd";
     }
     
-    @RequestMapping("/saveAdd")
-    public String saveAddAdmin(@ModelAttribute("customerBean") CustomerBean customerBean, Model model) {
+    @RequestMapping(value="/saveAdd")
+    public String saveAddCustomer(@ModelAttribute("customerBean") CustomerBean customerBean, Model model) {
+        
         Customer customer = new Customer();
         
         customer.setCustomerName(customerBean.getName());
@@ -47,6 +51,8 @@ public class CustomerController {
         
         cd.addCustomer(customer);
         
-        return "";
+        model.addAttribute("datacustomer", customerBean);
+        return "redirect:/customer";
     }
+    
 }
